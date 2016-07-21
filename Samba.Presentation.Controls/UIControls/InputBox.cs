@@ -1,0 +1,70 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace Samba.Presentation.Controls.UIControls
+{
+    public class InputBox
+    {
+        public DialogResult Show(string title, string promptText, ref string value, int type = 0)
+        {
+            //type = size of InputBox
+            //0 = small
+            //1 = bigger
+
+            Form form = new Form();
+            Label label = new Label();
+            TextBox textBox = new TextBox();
+            Button buttonOk = new Button();
+            Button buttonCancel = new Button();
+
+            form.Text = title;
+            label.Text = promptText;
+            textBox.Text = value;
+
+            buttonOk.Text = "OK";
+            buttonCancel.Text = "Cancel";
+            buttonOk.DialogResult = DialogResult.OK;
+            buttonCancel.DialogResult = DialogResult.Cancel;
+
+            if (type == 0)
+            {
+                label.SetBounds(9, 20, 372, 13);
+                textBox.SetBounds(12, 36, 372, 20);
+                buttonOk.SetBounds(228, 72, 75, 23);
+                buttonCancel.SetBounds(309, 72, 75, 23);
+                form.ClientSize = new Size(396, 107);
+            }
+            else if (type == 1)
+            {
+                label.SetBounds(9, 20, 372, 13);
+                textBox.SetBounds(12, 76, 372, 20);
+                textBox.PasswordChar = '*';
+                buttonOk.SetBounds(228, 107, 75, 23);
+                buttonCancel.SetBounds(309, 107, 75, 23);
+                form.ClientSize = new Size(396, 137);
+            }
+
+            label.AutoSize = true;
+            textBox.Anchor = textBox.Anchor | AnchorStyles.Right;
+            buttonOk.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+
+            form.Controls.AddRange(new Control[] { label, textBox, buttonOk, buttonCancel });
+            form.ClientSize = new Size(Math.Max(300, label.Right + 10), form.ClientSize.Height);
+            form.FormBorderStyle = FormBorderStyle.FixedDialog;
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+            form.AcceptButton = buttonOk;
+            form.CancelButton = buttonCancel;
+
+            DialogResult dialogResult = form.ShowDialog();
+            value = textBox.Text;
+            return dialogResult;
+        }
+    }
+}
